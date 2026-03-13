@@ -18,6 +18,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -106,7 +114,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Codec Cold', sans-serif;
+    font-family: 'Playfair Display', serif;
   }
 }
 
@@ -117,43 +125,58 @@
   .font-codec {
     font-family: 'Codec Cold', sans-serif;
   }
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
 }
 
-@keyframes engine-rise {
+/* Hero background zoom animation */
+@keyframes bg-zoom-out {
   0% {
-    transform: translateY(100%) scale(0.8);
-    opacity: 0;
-    filter: brightness(0.5);
-  }
-  60% {
-    transform: translateY(-5%) scale(1.02);
-    opacity: 1;
-    filter: brightness(1.2);
-  }
-  80% {
-    transform: translateY(2%) scale(0.99);
-    filter: brightness(1.4);
+    transform: scale(1.15);
   }
   100% {
-    transform: translateY(0%) scale(1);
-    opacity: 1;
-    filter: brightness(1);
+    transform: scale(1);
   }
 }
 
-@keyframes glow-pulse {
+/* Engine rise animation */
+@keyframes engine-rise {
+  0% {
+    transform: translateY(80px) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Engine float animation */
+@keyframes engine-float {
   0%, 100% {
-    filter: drop-shadow(0 0 20px hsla(24, 100%, 55%, 0.4)) drop-shadow(0 0 60px hsla(24, 100%, 55%, 0.2));
+    transform: translateY(0);
   }
   50% {
-    filter: drop-shadow(0 0 40px hsla(24, 100%, 55%, 0.7)) drop-shadow(0 0 80px hsla(24, 100%, 55%, 0.4));
+    transform: translateY(-12px);
   }
 }
 
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px hsla(24, 100%, 55%, 0.3)) drop-shadow(0 0 40px hsla(24, 100%, 55%, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px hsla(24, 100%, 55%, 0.6)) drop-shadow(0 0 60px hsla(24, 100%, 55%, 0.3));
+  }
+}
+
+/* Text fade in */
 @keyframes text-fade-in {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
@@ -161,13 +184,20 @@
   }
 }
 
+.animate-bg-zoom {
+  animation: bg-zoom-out 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 .animate-engine-rise {
-  animation: engine-rise 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: engine-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-engine-float {
+  animation: engine-float 3s ease-in-out infinite;
 }
 
 .animate-glow-pulse {
   animation: glow-pulse 3s ease-in-out infinite;
-  animation-delay: 2s;
 }
 
 .animate-text-fade {
