@@ -60,6 +60,7 @@ const faqs = [
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
+  const [ottoRotate, setOttoRotate] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -79,6 +80,12 @@ const Index = () => {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+  };
+
+  const handleOttoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOttoRotate((prev) => prev + 360);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -147,21 +154,22 @@ const Index = () => {
       </div>
 
       {/* Fixed floating pill nav - overlays hero and content */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex w-full justify-center px-4 py-4 pointer-events-none">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex w-full justify-center px-2 py-3 sm:px-4 sm:py-4 pointer-events-none">
         <div
-          className="pointer-events-auto flex items-center gap-6 rounded-full px-6 py-3 shadow-lg md:gap-8"
+          className="pointer-events-auto flex items-center gap-2 rounded-full px-3 py-2 shadow-lg sm:gap-4 sm:px-5 sm:py-2.5 md:gap-6 md:px-6 md:py-3 md:gap-8"
           style={{ backgroundColor: "#363636" }}
         >
           <a
             href="#"
-            onClick={scrollToTop}
-            className="flex items-center justify-center transition-opacity hover:opacity-90"
+            onClick={handleOttoClick}
+            className="flex items-center justify-center transition-opacity hover:opacity-90 flex-shrink-0"
             aria-label="Home"
           >
             <motion.img
               src="/Otto_cropped.png"
               alt="Otto"
-              className="h-6 w-6 object-contain"
+              className="h-5 w-5 sm:h-6 sm:w-6 object-contain"
+              animate={{ rotate: ottoRotate }}
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
             />
@@ -171,10 +179,9 @@ const Index = () => {
               key={label}
               href={href}
               onClick={href === "#" ? scrollToTop : undefined}
-              className="font-lato flex items-center gap-2 text-sm tracking-wide text-white transition-colors hover:opacity-90"
-              style={{ gap: "0.4em" }}
+              className="font-lato flex items-center gap-1.5 text-xs tracking-wide text-white transition-colors hover:opacity-90 whitespace-nowrap sm:gap-2 sm:text-sm"
             >
-              <Icon size={18} style={{ color: ICON_COLOR, flexShrink: 0 }} />
+              <Icon className="h-4 w-4 flex-shrink-0 sm:h-[18px] sm:w-[18px]" style={{ color: ICON_COLOR }} />
               <span>{label}</span>
             </a>
           ))}
