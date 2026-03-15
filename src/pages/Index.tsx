@@ -1,7 +1,62 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Home, Users, HelpCircle, BookOpen, Mail } from "lucide-react";
 import voidBg from "@/assets/void-bg.png";
-import gazebo from "@/assets/gazebo.png";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
+
+const ICON_COLOR = "#a3a3a3";
+const NAV_ITEMS = [
+  { href: "#", label: "Home", Icon: Home },
+  { href: "#about", label: "About", Icon: Users },
+  { href: "#faq", label: "Faq", Icon: HelpCircle },
+  { href: "#manifesto", label: "Manifesto", Icon: BookOpen },
+  { href: "#contact", label: "Contact", Icon: Mail },
+] as const;
+
+const faqs = [
+  {
+    id: "001",
+    question: "Is Automia currently active within schools?",
+    answer:
+      "Automia is in pilot with select partners. We are expanding to more institutions and will share updates on availability.",
+  },
+  {
+    id: "002",
+    question: "How does the memory engine capture data without disrupting learning?",
+    answer:
+      "The system works invisibly in the background, capturing interactions, questions to the AI tutor, struggles, and chat messages to build a learning profile. No extra steps are required from students or teachers.",
+  },
+  {
+    id: "003",
+    question: "Is user data private and secure?",
+    answer:
+      "Yes. Data is encrypted and we follow strict privacy and security practices. We do not sell or share personal data.",
+  },
+  {
+    id: "004",
+    question: "How quickly will I start seeing insights and alerts?",
+    answer:
+      "Initial insights appear within the first few sessions. Deeper patterns and alerts become more accurate as more data is collected over time.",
+  },
+  {
+    id: "005",
+    question: "Do I need technical expertise to use this platform?",
+    answer:
+      "No. Automia is designed for educators and teams. Setup is guided and the interface is built to be intuitive.",
+  },
+  {
+    id: "006",
+    question: "What makes this different from traditional workflow tools?",
+    answer:
+      "Automia adds memory and personalization: it learns from each session and improves over time, instead of treating every run as independent.",
+  },
+];
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
@@ -12,57 +67,42 @@ const Index = () => {
     offset: ["start start", "end start"],
   });
 
-  // Parallax: background moves slower
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  // Gazebo recedes on scroll
-  const gazeboY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const gazeboScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 200);
     return () => clearTimeout(timer);
   }, []);
 
+  const scrollToTop = (e: React.MouseEvent) => {
+    if ((e.currentTarget as HTMLAnchorElement).getAttribute("href") === "#") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="w-full">
-      {/* Sticky Hero wrapper — hero stays pinned while content rolls over */}
+    <div className="w-full relative">
+      {/* Hero first so background fills from top of viewport */}
       <div ref={heroRef} className="relative h-[200vh]">
         <section className="sticky top-0 h-screen w-full overflow-hidden">
-          {/* Background with parallax */}
+          {/* Background: declarative 2s zoom-in from scale 1 to 1.05 */}
           <motion.div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
             style={{
               backgroundImage: `url(${voidBg})`,
               y: bgY,
-              scale: loaded ? 1 : 1.12,
-              transition: "scale 2.5s cubic-bezier(0.25,0.46,0.45,0.94)",
+            }}
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.05 }}
+            transition={{
+              duration: 2,
+              ease: [0.33, 1, 0.68, 1],
             }}
           />
 
-          {/* Navigation */}
-          <nav className="absolute top-8 left-1/2 -translate-x-1/2 z-50">
-            <div
-              className="flex items-center gap-8 px-8 py-3 rounded-full"
-              style={{ backgroundColor: "#474747" }}
-            >
-              {["Home", "About", "Contact"].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="font-playfair text-sm tracking-wide transition-colors duration-300"
-                  style={{ color: "#FAFAF1" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#FF914D")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#FAFAF1")}
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-          </nav>
-
           {/* Content overlay */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            {/* Title */}
             <motion.h1
               className="font-amazing text-4xl md:text-5xl text-center leading-tight mb-5"
               style={{ color: "#FAFAF1" }}
@@ -75,7 +115,6 @@ const Index = () => {
               Workflow
             </motion.h1>
 
-            {/* Buttons */}
             <motion.div
               className="flex gap-4 mb-6 z-20"
               initial={{ opacity: 0, y: 20 }}
@@ -103,36 +142,51 @@ const Index = () => {
                 What is Automia?
               </button>
             </motion.div>
-
-            {/* Gazebo */}
-            <motion.div
-              className="relative"
-              style={{ y: gazeboY, scale: gazeboScale }}
-            >
-              <motion.img
-                src={gazebo}
-                alt="Automia Gazebo"
-                className="w-[260px] md:w-[360px] lg:w-[440px] object-contain"
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={loaded ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{
-                  duration: 1,
-                  delay: 0.3,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              />
-            </motion.div>
           </div>
         </section>
       </div>
 
-      {/* Content panel that rolls up over the hero */}
+      {/* Fixed floating pill nav - overlays hero and content */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex w-full justify-center px-4 py-4 pointer-events-none">
+        <div
+          className="pointer-events-auto flex items-center gap-6 rounded-full px-6 py-3 shadow-lg md:gap-8"
+          style={{ backgroundColor: "#363636" }}
+        >
+          <a
+            href="#"
+            onClick={scrollToTop}
+            className="flex items-center justify-center transition-opacity hover:opacity-90"
+            aria-label="Home"
+          >
+            <motion.img
+              src="/Otto_cropped.png"
+              alt="Otto"
+              className="h-6 w-6 object-contain"
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            />
+          </a>
+          {NAV_ITEMS.map(({ href, label, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              onClick={href === "#" ? scrollToTop : undefined}
+              className="font-lato flex items-center gap-2 text-sm tracking-wide text-white transition-colors hover:opacity-90"
+              style={{ gap: "0.4em" }}
+            >
+              <Icon size={18} style={{ color: ICON_COLOR, flexShrink: 0 }} />
+              <span>{label}</span>
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      {/* About section */}
       <section
         id="about"
-        className="relative z-20 min-h-screen w-full px-8 md:px-16 lg:px-24 py-24 -mt-[100vh]"
+        className="relative z-20 min-h-screen w-full scroll-mt-20 px-8 md:px-16 lg:px-24 py-24 -mt-[100vh]"
         style={{ backgroundColor: "#FAFAF1" }}
       >
-        {/* Label */}
         <div className="mb-8">
           <span
             className="inline-block px-4 py-1.5 rounded-full text-xs font-playfair tracking-wider border"
@@ -142,9 +196,7 @@ const Index = () => {
           </span>
         </div>
 
-        {/* Main content area */}
         <div className="flex flex-col lg:flex-row justify-between gap-16">
-          {/* Left - Title */}
           <div className="lg:w-2/3">
             <h2
               className="font-playfair text-4xl md:text-6xl lg:text-7xl leading-[1.1] mb-12 font-medium italic"
@@ -199,7 +251,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Right - Read More button */}
           <div className="lg:w-1/3 flex lg:justify-end lg:items-start">
             <button
               className="px-8 py-3 rounded-full font-playfair text-sm tracking-wide transition-colors duration-300 cursor-pointer"
@@ -210,6 +261,142 @@ const Index = () => {
               Read More
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ section */}
+      <section
+        id="faq"
+        className="relative z-20 min-h-screen w-full scroll-mt-20 px-8 md:px-16 lg:px-24 py-24"
+        style={{ backgroundColor: "#FAFAF1" }}
+      >
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="mb-10">
+            <span
+              className="inline-block rounded-full border px-4 py-1.5 text-xs font-playfair tracking-wider"
+              style={{ borderColor: "#474747", color: "#474747" }}
+            >
+              Faq
+            </span>
+          </div>
+
+          <p
+            className="mb-4 max-w-3xl font-playfair text-2xl leading-relaxed md:text-3xl"
+            style={{ color: "#474747" }}
+          >
+            Automia is an AI automation platform with session and project-level memory
+            that personalizes workflows and improves outcomes over time.
+          </p>
+          <p
+            className="mb-12 font-playfair text-base"
+            style={{ color: "#474747", opacity: 0.7 }}
+          >
+            Here are some frequently asked questions.
+          </p>
+
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq) => (
+              <AccordionItem
+                key={faq.id}
+                value={faq.id}
+                className="border-b py-5"
+                style={{ borderColor: "#e5e5e5" }}
+              >
+                <AccordionTrigger
+                  className={cn(
+                    "group flex w-full items-center justify-between gap-4 py-0 hover:no-underline [&>svg]:hidden",
+                  )}
+                >
+                  <div className="flex items-baseline gap-4 text-left">
+                    <span
+                      className="tabular-nums font-playfair text-sm font-medium"
+                      style={{ color: "#FF914D" }}
+                    >
+                      {faq.id}
+                    </span>
+                    <span
+                      className="font-playfair text-lg md:text-xl"
+                      style={{ color: "#474747" }}
+                    >
+                      {faq.question}
+                    </span>
+                  </div>
+                  <span
+                    className="flex h-8 w-8 flex-shrink-0 items-center justify-center text-xl transition-colors group-hover:bg-black/5"
+                    style={{ color: "#474747" }}
+                  >
+                    <span className="block group-data-[state=open]:hidden">+</span>
+                    <span className="hidden group-data-[state=open]:block">×</span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="pt-0">
+                  <p
+                    className="pl-14 pb-4 font-playfair text-base leading-relaxed"
+                    style={{ color: "#474747", opacity: 0.75 }}
+                  >
+                    {faq.answer}
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
+      {/* Manifesto section */}
+      <section
+        id="manifesto"
+        className="relative z-20 min-h-screen w-full scroll-mt-20 px-8 md:px-16 lg:px-24 py-24"
+        style={{ backgroundColor: "#FAFAF1" }}
+      >
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="mb-10">
+            <span
+              className="inline-block rounded-full border px-4 py-1.5 text-xs font-playfair tracking-wider"
+              style={{ borderColor: "#474747", color: "#474747" }}
+            >
+              Manifesto
+            </span>
+          </div>
+          <p
+            className="mb-4 max-w-3xl font-playfair text-2xl leading-relaxed md:text-3xl"
+            style={{ color: "#474747" }}
+          >
+            We believe automation should remember, learn, and adapt—not start from zero
+            every time.
+          </p>
+          <p
+            className="font-playfair text-base leading-relaxed"
+            style={{ color: "#474747", opacity: 0.75 }}
+          >
+            Automia is built on the idea that workflows and teams get better when the
+            system carries context across sessions, personalizes to each user, and
+            surfaces insights over time. We aspire to change the way you automate.
+          </p>
+        </div>
+      </section>
+
+      {/* Contact section */}
+      <section
+        id="contact"
+        className="relative z-20 min-h-screen w-full scroll-mt-20 px-8 md:px-16 lg:px-24 py-24"
+        style={{ backgroundColor: "#FAFAF1" }}
+      >
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="mb-8">
+            <span
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-playfair tracking-wider border"
+              style={{ borderColor: "#474747", color: "#474747" }}
+            >
+              Contact
+            </span>
+          </div>
+          <p
+            className="font-playfair text-base max-w-2xl"
+            style={{ color: "#474747", opacity: 0.7 }}
+          >
+            Get in touch with the Automia team.
+          </p>
         </div>
       </section>
     </div>
