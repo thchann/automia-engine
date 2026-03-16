@@ -96,7 +96,7 @@ const Index = () => {
           <motion.div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
             style={{
-              backgroundImage: "url(/Otto_Background.png)",
+              backgroundImage: "url(/Automia_BG.png)",
               y: bgY,
             }}
             initial={{ scale: 1 }}
@@ -110,7 +110,7 @@ const Index = () => {
           {/* Content overlay */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
             <motion.h1
-              className="font-amazing text-4xl md:text-5xl text-center leading-tight mb-5"
+              className="font-lato text-4xl md:text-5xl text-center leading-tight mb-5"
               style={{ color: "#FAFAF1" }}
               initial={{ opacity: 0, y: 20 }}
               animate={loaded ? { opacity: 1, y: 0 } : {}}
@@ -128,7 +128,7 @@ const Index = () => {
               transition={{ duration: 0.8, delay: 1.4, ease: "easeOut" }}
             >
               <button
-                className="px-7 py-2.5 rounded-full font-playfair text-sm tracking-wide transition-colors duration-300 cursor-pointer"
+                className="px-7 py-2.5 rounded-full font-lato text-sm tracking-wide transition-colors duration-300 cursor-pointer"
                 style={{ backgroundColor: "#474747", color: "#FAFAF1" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#FF914D")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#FAFAF1")}
@@ -136,7 +136,7 @@ const Index = () => {
                 Start Now
               </button>
               <button
-                className="px-7 py-2.5 rounded-full font-playfair text-sm tracking-wide border-2 transition-colors duration-300 cursor-pointer"
+                className="px-7 py-2.5 rounded-full font-lato text-sm tracking-wide border-2 transition-colors duration-300 cursor-pointer"
                 style={{
                   borderColor: "#FAFAF1",
                   color: "#FAFAF1",
@@ -259,7 +259,7 @@ const Index = () => {
 
           <div className="lg:w-1/3 flex lg:justify-end lg:items-start">
             <button
-              className="px-8 py-3 rounded-full font-playfair text-sm tracking-wide transition-colors duration-300 cursor-pointer"
+              className="px-8 py-3 rounded-full font-lato text-sm tracking-wide transition-colors duration-300 cursor-pointer"
               style={{ backgroundColor: "#474747", color: "#FAFAF1" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#FF914D")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#FAFAF1")}
