@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Home, Users, HelpCircle, BookOpen, Mail } from "lucide-react";
-import voidBg from "@/assets/void-bg.png";
 import {
   Accordion,
   AccordionContent,
@@ -97,7 +96,7 @@ const Index = () => {
           <motion.div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
             style={{
-              backgroundImage: `url(${voidBg})`,
+              backgroundImage: "url(/Otto_Background.png)",
               y: bgY,
             }}
             initial={{ scale: 1 }}
